@@ -1,3 +1,4 @@
+$('.board').hide();
 ////////////////////////////////////////////////
 //Append start screen and require name input///
 ///////////////////////////////////////////////
@@ -22,6 +23,7 @@ $('.button').on('click', () => {
 			$('.error').css({'font-weight': 'bold', 'color':'red', 'margin-bottom': '0px', 'font-size': '9px'});
 		} else {
 		$('.screen-start').hide();
+		$('.board').show();
 		}
 	/////////////////////////////////
 	/////append player names to game/
@@ -152,15 +154,19 @@ const hasClass = (classNumber) =>
 $('.box').on('click', () => {
 	if(hasClass(1))
 	 {
+		 $('.board').hide();
 	   $('.screen-win').addClass('screen-win-one');
 			$('.message').html($('.playerName').val().toUpperCase() + ' WINS!');
 			$('.screen-win').show();
 		} else if(hasClass(2))
 	    	{
+					$('.board').hide();
 		   			$('.screen-win').addClass('screen-win-two');
 					$('.message').html($('.player2name').val().toUpperCase() + ' WINS!');
 					$('.screen-win').show();
-	   			} else if($('.box').not('.box-filled-1 , .box-filled-2').length === 0) {
+	   			} else if($('.box').not('.box-filled-1 , .box-filled-2').length === 0)
+				{
+					$('.board').hide();
 					$('.screen-win').addClass('screen-win-tie');
 					$('.message').html('Tie!');
 					$('.screen-win').show();

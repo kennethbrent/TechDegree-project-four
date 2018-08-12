@@ -6,40 +6,13 @@ $('body').append(
 	<header>\
 		<h1>Tic Tac Toe</h1>\
 		<p class='error'></p>\
-		<input type='text' class='playerName errorMessage' placeholder='Enter your name'>\
-		<h5 class='chooseOpponent'>Choose your opponent</h5>\
-		<div class='checkboxDiv'>\
-			<label for='computer'>Friend</label>\
-			<input type='checkbox' class='opponent' id='friend' name='friend'>\
-			<label for='computer'>Computer</label>\
-			<input type='checkbox' class='opponent' id='computer' name='computer'>\
-		</div>\
+		<input type='text' class='playerName errorMessage' placeholder='Enter player1 name'>\
+		<p class='error'></p>\
+		<input type='text' class='player2name playerName errorMessage' placeholder='Enter player2 name'>\
 		<a href='#'' class='button'>Start game</a>\
 	</header></div>'");
-
-///////////////////////////////////////////////////////
-// **CSS**        Style checkbox div	 **CSS** //////
-//////////////////////////////////////////////////////
-$('.chooseOpponent').css({'margin': '3px auto'});
-$('.checkboxDiv').css('margin-bottom','7px');
-
-//////////////////////////////////////////////////////////
-///Append player 2 name input if friend checkbox checked//
 /////////////////////////////////////////////////////////
-$('#friend').change(function (){
-	
-	if(document.getElementById('friend').checked) {
-		$('.checkboxDiv').append("<p class='error'></p><input type='text' class='player2name errorMessage' placeholder='Enter player2 name'>");
-		$('.player2name').css({'display': 'block','margin': '25px auto 15px auto', 'padding': '5px', 'border': 'none', 'border-radius': '5px'});
-		$('#computer').attr('disabled', true);
-	} else {
-		$('.player2name').remove();
-		$('#computer').attr('disabled', false);
-	
-	}
-});
-/////////////////////////////////////////////////////////
-///Require player 1 name and player 2 if checked////////
+///Require player 1 and player 2 name////////
 /////////////////////////////////////////////////////////
 $('.playerName').css({'display': 'block','margin': '25px auto 15px auto', 'padding': '5px', 'border': 'none', 'border-radius': '5px'});
 $('.button').on('click', () => {
@@ -55,17 +28,142 @@ $('.button').on('click', () => {
 	/////////////////////////////////
 	$('#player1').append("<p id='player1Name'></p>");
 	$('#player1Name').html($('.playerName').val().toUpperCase());
-	$('#player2').append("<p id='player2Name'>Megabot</p>");
-	
+	$('#player2').append("<p id='player2Name'></p>");
 	if($('.player2name').length) {
-	$('#player2Name').html($('.player2name').val().toUpperCase());
+		$('#player2Name').html($('.player2name').val().toUpperCase());
+	}
+	$('#player1Name, #player2Name').css({'margin': '4px 0 0 0', 'color': 'black', 'font-weight': 'bold', 'font-size': '20px'});
+});
+/////////////////////////////////////////////////////////////
+////  Set value ///////////////////
+////////////////////////////////////////////////////////////
+const player1token ='box-filled-1';
+const player2token= 'box-filled-2';
+const tokens = [player1token,player2token];
+let whoseTurn = 0;
+$('#player1').addClass('active');
+/////////////////////////////////////////////////////////////
+////////Append and hide Win Screen and hide by default///////
+////////////////////////////////////////////////////////////
+$('body').append("<div class='screen screen-win' id='finish'>\
+	<header>\
+    <h1>Tic Tac Toe</h1>\
+    <p class='message'></p>\
+    <a href='#' class='button'>New game</a>\
+  </header>\
+</div>")
+$('.screen-win').hide();
+//////////////////////////////////////////////////////////
+///////////////////////keep track of turn/////////////////
+///////////////////////////////////////////////////////////
+function toggle() {
+	if(whoseTurn == 0) {
+		$('#player2').addClass('active');
+		$('#player1').removeClass('active');
+		whoseTurn = 1;	
+	} else {
+		whoseTurn = 0;
+		$('#player2').removeClass('active');
+		$('#player1').addClass('active');
+	}
+}
+///////////////////////////////////////////////////////////////////
+//// change player turn on click and keep score///////////////////////
+/////////////////////////////////////////////////////////////////////////
+$('.box').on('click', function() {
+	if (!$(this).hasClass('box-filled-1') && !$(this).hasClass('box-filled-2')) {
+		$(this).addClass(tokens[whoseTurn]);	
+		toggle();
 	}
 	
-	$('#player1Name, #player2Name').css('margin', '4px 0 0 0');
 });
+///////////////////////////////////////////////
+///Restart on new game button click////
+///////////////////////////////////////////////
+$('.screen-win .button').on('click', () =>{
+	$('.screen-win').hide();
+	$('.screen-start').show();
+	$('.box').removeClass('box-filled-1');
+	$('.box').removeClass('box-filled-2');
+	toggle();
+});
+///////////////////////////////////////
+////Show on mouseover//////////////////
+//////////////////////////////////////
+$(".box").hover(function(){
+		if(whoseTurn === 0 && !$(this).hasClass('box-filled-1') && !$(this).hasClass('box-filled-2')){
+			$(this).css("background-image", "url(img/o.svg)");
+        	}
+		}, 
+		function(){
+        $(this).css("background-image", "");
+    });
 
-
-
-
-
-
+$(".box").hover(function(){
+		if(whoseTurn === 1 && !$(this).hasClass('box-filled-1') && !$(this).hasClass('box-filled-2')){
+			$(this).css("background-image", "url(img/x.svg)");
+        	}
+		}, 
+		function(){
+        $(this).css("background-image", "");
+    });
+/////////////////////////////////////
+//Put li with class of box into array
+//////////////////////////////////////
+const boxArray = $('.box').toArray();
+////////////////////////////////////////////
+//function to check if box has been clicked/
+///////////////////////////////////////////
+const hasClass = (classNumber) => 
+	$(boxArray[0]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[1]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[2]).hasClass('box-filled-' + classNumber)||
+		
+		$(boxArray[3]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[4]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[5]).hasClass('box-filled-' + classNumber)||
+		
+		$(boxArray[6]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[7]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[8]).hasClass('box-filled-' + classNumber)||
+		
+		$(boxArray[2]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[5]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[8]).hasClass('box-filled-' + classNumber)||
+		
+		$(boxArray[1]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[4]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[7]).hasClass('box-filled-' + classNumber)||
+		
+		$(boxArray[0]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[3]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[6]).hasClass('box-filled-' + classNumber)||
+		
+		$(boxArray[2]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[4]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[6]).hasClass('box-filled-' + classNumber)||
+		
+		$(boxArray[0]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[4]).hasClass('box-filled-' + classNumber)&&
+		$(boxArray[8]).hasClass('box-filled-' + classNumber);
+////////////////////////////////////////////////
+///Check if a winner or tie on click//////////
+/////////////////////////////////////////////
+$('.box').on('click', () => {
+	if(hasClass(1))
+	 {
+	   $('.screen-win').addClass('screen-win-one');
+			$('.message').html($('.playerName').val().toUpperCase() + ' WINS!');
+			$('.screen-win').show();
+		} else if(hasClass(2))
+	    	{
+		   			$('.screen-win').addClass('screen-win-two');
+					$('.message').html($('.player2name').val().toUpperCase() + ' WINS!');
+					$('.screen-win').show();
+	   			} else if($('.box').not('.box-filled-1 , .box-filled-2').length === 0) {
+					$('.screen-win').addClass('screen-win-tie');
+					$('.message').html('Tie!');
+					$('.screen-win').show();
+					
+				}
+	});

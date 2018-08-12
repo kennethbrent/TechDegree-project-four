@@ -84,7 +84,7 @@ $('.box').on('click', function() {
 ///////////////////////////////////////////////
 $('.screen-win .button').on('click', () =>{
 	$('.screen-win').hide();
-	$('.screen-start').show();
+	$('.board').show();     
 	$('.box').removeClass('box-filled-1');
 	$('.box').removeClass('box-filled-2');
 	toggle();
